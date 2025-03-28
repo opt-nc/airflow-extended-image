@@ -15,7 +15,6 @@ Cette image Docker étend l'image officielle d'Apache Airflow en y ajoutant des 
 Cette image inclut les providers Airflow suivants :
 - apache-airflow-providers-kafka
 
-
 ## Versions
 
 L'image suit la convention de versionnement suivante :
@@ -24,3 +23,24 @@ optnc/airflow:{version-airflow}-providers-v{version-providers}
 ```
 
 Exemple : `optnc/airflow:2.10.5-providers-v0`
+
+
+## Comment utiliser cette image dans un helm chart
+
+Dans le fichier `values.yaml` de votre chart Helm, spécifiez l'image Docker à utiliser pour le déploiement 
+d'Airflow, comme ci-dessous :
+
+```yaml 
+
+# Default airflow repository -- overridden by all the specific images below
+defaultAirflowRepository: optnc/airflow
+
+# Default airflow tag to deploy
+defaultAirflowTag: "2.10.5-providers-v0"
+
+# Default airflow digest. If specified, it takes precedence over tag
+defaultAirflowDigest: ~
+
+# Airflow version (Used to make some decisions based on Airflow Version being deployed)
+airflowVersion: "2.10.5"
+```
