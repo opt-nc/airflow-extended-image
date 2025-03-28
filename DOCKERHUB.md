@@ -13,7 +13,9 @@ Cette image Docker étend l'image officielle d'Apache Airflow en y ajoutant des 
 ## Providers inclus
 
 Cette image inclut les providers Airflow suivants :
+
 - apache-airflow-providers-kafka
+
 
 ## Versions
 
