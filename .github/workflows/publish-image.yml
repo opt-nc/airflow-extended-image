@@ -41,15 +41,15 @@ jobs:
           password: ${{ secrets.OPT_DOCKERHUB_PASSWORD }}
 
       - name: 🐳 Build Docker image
-        run: docker build -t optnc/airflow-extended-image:${{ env.VERSION }} -t optnc/airflow-extended-image:latest .
+        run: docker build -t optnc/airflow:${{ env.VERSION }} -t optnc/airflow:latest .
 
       - name: 🚀 Push Docker image to DockerHub Registry
-        run: docker push --all-tags optnc/airflow-extended-image
+        run: docker push --all-tags optnc/airflow
 
       - name: 🐳 Add Docker Hub Description
         uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.OPT_DOCKERHUB_LOGIN }}
           password: ${{ secrets.OPT_DOCKERHUB_PASSWORD }}
-          repository: optnc/airflow-extended-image
+          repository: optnc/airflow
           readme-filepath: ./DOCKERHUB.md
