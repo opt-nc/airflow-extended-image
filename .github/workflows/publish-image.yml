@@ -51,5 +51,5 @@ jobs:
         with:
           username: ${{ secrets.OPT_DOCKERHUB_LOGIN }}
           password: ${{ secrets.OPT_DOCKERHUB_PASSWORD }}
-          repository: ${{ env.DOCKERHUB_REPO }}
+          repository: optnc/airflow-extended-image
           readme-filepath: ./DOCKERHUB.md
