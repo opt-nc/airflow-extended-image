@@ -1,0 +1,55 @@
+name: 🚀 Publish Docker Image
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Choose a version to publish
+        required: true
+
+
+jobs:
+  publish_doc:
+    name: 🐳 Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✔️ Get version from release
+        if: ${{ github.event_name == 'release'}}
+        run: |
+          TAG=${{ github.event.release.tag_name }}
+          echo "VERSION=${TAG##v}" >> $GITHUB_ENV
+          echo $VERSION
+      - name: ✔️ Get version from manual launch
+        if: ${{ github.event_name == 'workflow_dispatch'}}
+        run: |
+          TAG=${{ github.event.inputs.version }}
+          echo "VERSION=${TAG##v}" >> $GITHUB_ENV
+          echo $VERSION
+
+      - name: 📤 Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ env.VERSION }}
+
+      # Login against a Docker
+      - name: 🔐 Log into DockerHub registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.OPT_DOCKERHUB_LOGIN }}
+          password: ${{ secrets.OPT_DOCKERHUB_PASSWORD }}
+
+      - name: 🐳 Build Docker image
+        run: docker build -t optnc/airflow-extended-image:${{ env.VERSION }} -t optnc/airflow-extended-image:latest .
+
+      - name: 🚀 Push Docker image to DockerHub Registry
+        run: docker push --all-tags optnc/airflow-extended-image
+
+      - name: 🐳 Add Docker Hub Description
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.OPT_DOCKERHUB_LOGIN }}
+          password: ${{ secrets.OPT_DOCKERHUB_PASSWORD }}
+          repository: ${{ env.DOCKERHUB_REPO }}
+          readme-filepath: ./DOCKERHUB.md
