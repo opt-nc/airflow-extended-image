@@ -1,4 +1,4 @@
-FROM docker.io/apache/airflow:2.10.5-python3.12
+FROM docker.io/apache/airflow:3.0.0-python3.12
 
 # update pip
 RUN pip3 install --upgrade pip
